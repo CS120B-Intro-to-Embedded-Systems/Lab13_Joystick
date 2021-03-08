@@ -107,7 +107,7 @@ int shiftTick(int state){
       }
       break;
     case up:
-      dir = 2
+      dir = 2;
       if(row == 0xFE){
         row = 0xEF;
       }else{
@@ -143,7 +143,7 @@ int shiftTick(int state){
       }
       break;
     case downLeft:
-      dir = 6;
+      dir = 6
       if(pattern == 0x80 && row == 0xEF){
         pattern = 0x01;
         row = 0xFE;
@@ -170,106 +170,55 @@ int shiftTick(int state){
   return state;
 }
 //FOR VARIABLE SPEED
-enum xSpeedControlStates{sc_wait, leftSpeed, rightSpeed};
-
-//change rightSpeed at intervals [0, 128],[128,256],[256, 384],[384, 512]
-//change leftSpeed at intervals [512, 640],[640, 768],[768, 896],[896, 1023]
-unsigned long speed[4] = {1000, 500, 250, 100};
-
-int xSpeedControlTick(int state){
-  //Transitions
-  switch(state){
-    case sc_wait:
-      if(dir == 0){
-        state = leftSpeed;
-      }else if(dir == 1){
-        state = rightSpeed;
-      }else{
-        state = wait;
-      }
-      break;
-    case leftSpeed: state = wait; break;
-    case rightSpeed: state = wait; break;
-    default: state = wait; break;
-  }
-  //Actions
-  switch(state){
-    case sc_wait: break;
-    case leftSpeed:
-      if(inputHor > 512 && inputHor < 640){
-        *taskPtr->period = speed[0];
-      }else if(inputHor >= 640 && inputHor < 768){
-        *taskPtr->period = speed[1];
-      }else if(inputHor >= 768 && inputHor < 896){
-        *taskPtr->period = speed[2];
-      }else if(inputHor >= 896 && inputHor <= 1023){
-        *taskPtr->period = speed[3]
-      }
-      break;
-    case rightSpeed:
-      if(inputHor > 384 && inputHor < 512){
-        *taskPtr->period = speed[0];
-      }else if(inputHor > 256 && inputHor <= 384){
-        *taskPtr->period = speed[1];
-      }else if(inputHor > 128 && inputHor <= 256){
-        *taskPtr->period =speed[2];
-      }else if(inputHor >= 0 && inputHor <= 128){
-        *taskPtr->period = speed[3];
-      }
-      break;
-  }
-}
-
-//FOR VARIABLE SPEED
-enum ySpeedControlStates{sc_wait, upSpeed, downSpeed};
-
-//change rightSpeed at intervals [0, 128],[128,256],[256, 384],[384, 512]
-//change leftSpeed at intervals [512, 640],[640, 768],[768, 896],[896, 1023]
-unsigned long speed[4] = {1000, 500, 250, 100};
-
-int ySpeedControlTick(int state){
-  //Transitions
-  switch(state){
-    case sc_wait:
-      if(dir == 2){
-        state = upSpeed;
-      }else if(dir == 3){
-        state = downSpeed;
-      }else{
-        state = wait;
-      }
-      break;
-    case upSpeed: state = wait; break;
-    case downSpeed: state = wait; break;
-    default: state = wait; break;
-  }
-  //Actions
-  switch(state){
-    case sc_wait: break;
-    case upSpeed:
-      if(inputVer > 512 && inputVer < 640){
-        *taskPtr->period = speed[0];
-      }else if(inputVer >= 640 && inputVer < 768){
-        *taskPtr->period = speed[1];
-      }else if(inputVer >= 768 && inputVer < 896){
-        *taskPtr->period = speed[2];
-      }else if(inputVer >= 896 && inputVer <= 1023){
-        *taskPtr->period = speed[3]
-      }
-      break;
-    case downSpeed:
-      if(inputVer > 384 && inputVer < 512){
-        *taskPtr->period = speed[0];
-      }else if(inputVer > 256 && inputVer <= 384){
-        *taskPtr->period = speed[1];
-      }else if(inputVer > 128 && inputVer <= 256){
-        *taskPtr->period =speed[2];
-      }else if(inputVer >= 0 && inputVer <= 128){
-        *taskPtr->period = speed[3];
-      }
-      break;
-  }
-}
+// enum speedControlStates{sc_wait, leftSpeed, rightSpeed};
+//
+// //change rightSpeed at intervals [0, 128],[128,256],[256, 384],[384, 512]
+// //change leftSpeed at intervals [512, 640],[640, 768],[768, 896],[896, 1023]
+// unsigned long speed[4] = {1000, 500, 250, 100};
+//
+// int speedControlTick(int state){
+//   //Transitions
+//   switch(state){
+//     case sc_wait:
+//       if(dir == 0){
+//         state = leftSpeed;
+//       }else if(dir == 1){
+//         state = rightSpeed;
+//       }else{
+//         state = wait;
+//       }
+//       break;
+//     case leftSpeed: state = wait; break;
+//     case rightSpeed: state = wait; break;
+//     default: state = wait; break;
+//   }
+//   //Actions
+//   switch(state){
+//     case sc_wait: break;
+//     case leftSpeed:
+//       if(inputHor > 512 && inputHor < 640){
+//         *taskPtr->period = speed[0];
+//       }else if(inputHor >= 640 && inputHor < 768){
+//         *taskPtr->period = speed[1];
+//       }else if(inputHor >= 768 && inputHor < 896){
+//         *taskPtr->period = speed[2];
+//       }else if(inputHor >= 896 && inputHor <= 1023){
+//         *taskPtr->period = speed[3]
+//       }
+//       break;
+//     case rightSpeed:
+//       if(inputHor > 384 && inputHor < 512){
+//         *taskPtr->period = speed[0];
+//       }else if(inputHor > 256 && inputHor <= 384){
+//         *taskPtr->period = speed[1];
+//       }else if(inputHor > 128 && inputHor <= 256){
+//         *taskPtr->period =speed[2];
+//       }else if(inputHor >= 0 && inputHor <= 128){
+//         *taskPtr->period = speed[3];
+//       }
+//       break;
+//   }
+// }
 
 int main(void) {
     /* Insert DDR and PORT initializations */
@@ -281,8 +230,8 @@ int main(void) {
     inputHor = ADC;
     inputVer = ~PINA & 0x02; //A1 = U/D
     /* Insert your solution below */
-    static task task1, task2, task3;
-    task *tasks[] = {&task1, &task2, &task3};
+    static task task1;
+    task *tasks[] = {&task1};
     const unsigned short numTasks = sizeof(tasks) / sizeof(task*);
     taskPtr = &task1;
     const char start = -1;
@@ -292,16 +241,6 @@ int main(void) {
     task1.period = 1000; //task period
     task1.elapsedTime = task1.period;
     task1.TickFct = &shiftTick;
-    //Task2 (xSpeedControlTick)
-    task2.state = start;
-    task2.period = 1000;
-    task2.elapsedTime = task2.period;
-    task2.TickFct = &xSpeedControlTick;
-    //Task3 (ySpeedControlTick)
-    task3.state = start;
-    task3.period = 1000;
-    task3.elapsedTime = task3.period;
-    task3.TickFct = &ySpeedControlTick;
 
     unsigned long GCD = tasks[0]->period;
     for(int i = 1; i < numTasks; i++){
